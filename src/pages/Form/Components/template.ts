@@ -5,7 +5,7 @@ const config = [
     type: ElInput,
     label: '活动名称',
     formKey: 'active',
-    value: '',
+    value: 'xxxxx',
   },
   {
     type: ElSelect,

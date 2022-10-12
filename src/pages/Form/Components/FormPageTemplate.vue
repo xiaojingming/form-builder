@@ -2,7 +2,12 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script lang="ts">
 import { defineComponent, h } from 'vue';
-import { ElFormItem } from 'element-plus';
+import { ElFormItem, ElOption } from 'element-plus';
+
+interface Options {
+  label: string;
+  value: string;
+}
 
 export default defineComponent({
   props: {
@@ -10,16 +15,24 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
+    modelValue: {
+      type: String,
+      default: '',
+    },
   },
-  setup(props) {
-    // const form = reactive({});
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
     return () => h(ElFormItem, {
       label: props.config.label,
     }, () => h(props.config.type, {
-      modelValue: props.config.value,
-      // onChange(v: string) {
-      // },
-    }));
+      modelValue: props.modelValue,
+      'onUpdate:modelValue': (value: string) => {
+        emit('update:modelValue', value);
+      },
+    }, () => props.config?.optionData.map((option: Options) => h(ElOption, {
+      label: option.label,
+      value: option.value,
+    }))));
   },
 });
 </script>
