@@ -4,9 +4,12 @@ import FormPageTemplate from './Components/FormPageTemplate.vue';
 import config from './Components/template';
 
 const form = reactive({
-  active: 'xxxxx',
+  active: '',
   area: 'area1',
 });
+const handleClick = () => {
+  console.log(form);
+};
 </script>
 
 <template>
@@ -14,10 +17,14 @@ const form = reactive({
     <FormPageTemplate
       v-for="(item, index) in config"
       :key="index"
-      v-model="form[item.formKey]"
+      v-model="form[(item.formKey as keyof typeof form)]"
       :config="item"
+      :form="form"
     />
   </el-form>
+  <el-button @click="handleClick">
+    click
+  </el-button>
 </template>
 
 <style lang='scss' scoped>

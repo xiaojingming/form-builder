@@ -5,13 +5,19 @@ const config = [
     type: ElInput,
     label: '活动名称',
     formKey: 'active',
-    value: 'xxxxx',
+    options: {
+      vIf: [
+        {
+          relationKey: 'area',
+          value: 'area1',
+        },
+      ],
+    },
   },
   {
     type: ElSelect,
     label: '活动区域',
     formKey: 'area',
-    value: 'area1',
     optionData: [
       {
         label: '区域1',

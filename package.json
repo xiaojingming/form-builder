@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
+    "@vitejs/plugin-vue-jsx": "^2.0.1",
     "element-plus": "^2.2.17",
     "vite": "^3.1.7",
     "vue": "^3.2.37",
