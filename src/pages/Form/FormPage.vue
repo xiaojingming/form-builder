@@ -4,8 +4,9 @@ import FormPageTemplate from './Components/FormPageTemplate.vue';
 import config from './Components/template';
 
 const form = reactive({
-  active: '',
+  active: '111',
   area: 'area1',
+  type: '1',
 });
 const handleClick = () => {
   console.log(form);

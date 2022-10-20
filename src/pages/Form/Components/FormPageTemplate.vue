@@ -1,15 +1,12 @@
+<!-- eslint-disable vue/require-default-prop -->
+<!-- eslint-disable no-underscore-dangle -->
 <!-- eslint-disable no-restricted-syntax -->
 <!-- eslint-disable consistent-return -->
-<!-- eslint-disable no-param-reassign -->
-<!-- eslint-disable vue/no-mutating-props -->
 <script lang="ts">
 import { defineComponent, h, computed } from 'vue';
-import { ElFormItem, ElOption } from 'element-plus';
-
-interface Options {
-  label: string;
-  value: string;
-}
+import { ElFormItem } from 'element-plus';
+import { useRouter } from 'vue-router';
+import DialogTemplate from '@/pages/Home/components/DialogTemplate.vue';
 
 export default defineComponent({
   props: {
@@ -18,8 +15,7 @@ export default defineComponent({
       default: () => {},
     },
     modelValue: {
-      type: String,
-      default: '',
+      type: [String, Boolean],
     },
     form: {
       type: Object,
@@ -28,6 +24,7 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const router = useRouter();
     const componentShow = computed(() => {
       const currentHasVif = props.config?.options?.vIf;
       if (currentHasVif) {
@@ -41,21 +38,43 @@ export default defineComponent({
     });
     return () => {
       if (!componentShow.value) {
-        emit('update:modelValue', '');
+        emit('update:modelValue', props.config.value);
         return;
       }
       return h(ElFormItem, {
         label: props.config.label,
-      }, () => h(props.config.type, {
-        modelValue: props.modelValue,
-        'onUpdate:modelValue': (value: string) => {
-          emit('update:modelValue', value);
-        },
-      }, () => props.config?.optionData
-        .map((option: Options) => h(ElOption, {
-          label: option.label,
-          value: option.value,
-        }))));
+      }, () => {
+        if (props.config.type.name === 'ElButton') {
+          return h(
+            props.config.type,
+            {
+              type: props.config._type,
+              size: props.config.size,
+              onClick() {
+                emit('update:modelValue', true);
+                props.config.clickEvent.map((event: Function) => event.call(null, {
+                  props: { title: 'hello world!', router },
+                  component: DialogTemplate,
+                }));
+              },
+            },
+            () => props.config._value,
+          );
+        }
+        return h(props.config.type, {
+          modelValue: props.modelValue,
+          'onUpdate:modelValue': (value: string) => {
+            emit('update:modelValue', value);
+          },
+        }, () => props.config?.children?.optionData
+          .map(
+            (option: any) => h(
+              props.config.children.type,
+              option,
+              props.config.children.needShowTag ? () => option.value : '',
+            ),
+          ));
+      });
     };
   },
 });
