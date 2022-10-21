@@ -4,7 +4,7 @@
 <!-- eslint-disable consistent-return -->
 <script lang="ts">
 import { defineComponent, h, computed } from 'vue';
-import { ElFormItem } from 'element-plus';
+import { ElFormItem, ElCheckbox } from 'element-plus';
 import { useRouter } from 'vue-router';
 import DialogTemplate from '@/pages/Home/components/DialogTemplate.vue';
 
@@ -75,6 +75,38 @@ export default defineComponent({
           return (props.modelValue as any[]).map((i) => h(props.config.type, null, {
             default: () => i.name,
           }));
+        }
+        if (props.config.type.name === 'ElCheckboxGroup') {
+          return [
+            h(ElCheckbox, {
+              modelValue: props.config.props.formKey,
+              'onUpdate:modelValue': (value: string) => {
+                emit('update:modelValue', value);
+              },
+              ...props.config.props,
+              onChange() {
+                console.log(props.modelValue);
+              },
+            }),
+            h(props.config.type, {
+              modelValue: props.modelValue,
+              'onUpdate:modelValue': (value: string) => {
+                emit('update:modelValue', value);
+              },
+              onChange(v: any) {
+                console.log(v);
+              },
+            }, () => props.config?.children?.optionData
+              .map(
+                (option: any) => h(
+                  props.config.children.type,
+                  {
+                    ...option,
+                  },
+                  props.config.children.needShowTag ? () => option.value : '',
+                ),
+              )),
+          ];
         }
         return h(props.config.type, {
           modelValue: props.modelValue,

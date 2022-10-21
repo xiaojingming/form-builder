@@ -8,6 +8,8 @@ const form = reactive({
   area: 'area1',
   type: '1',
   specificType: [],
+  checklist: [],
+  checkAll: true,
 });
 const handleClick = () => {
   console.log(form);

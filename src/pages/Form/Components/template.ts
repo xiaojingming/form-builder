@@ -1,5 +1,5 @@
 import {
-  ElInput, ElSelect, ElOption, ElRadioGroup, ElRadio, ElButton, ElTag,
+  ElInput, ElSelect, ElOption, ElRadioGroup, ElRadio, ElButton, ElTag, ElCheckboxGroup, ElCheckbox,
 } from 'element-plus';
 import useDialog from '@/utils/useDialog';
 
@@ -89,6 +89,30 @@ const config = [
         {
           relationKey: 'specificType',
           value: (arr: any[]) => arr.length > 0,
+        },
+      ],
+    },
+  },
+  {
+    type: ElCheckboxGroup,
+    label: '多选框组件',
+    formKey: 'checklist',
+    props: {
+      indeterminate: true,
+      formKey: 'checkAll',
+      label: 'checkAll',
+    },
+    children: {
+      type: ElCheckbox,
+      optionData: [
+        {
+          label: 'Option A',
+        },
+        {
+          label: 'Option B',
+        },
+        {
+          label: 'Option C',
         },
       ],
     },
