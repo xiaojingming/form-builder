@@ -1,5 +1,5 @@
 import {
-  ElInput, ElSelect, ElOption, ElRadioGroup, ElRadio, ElButton,
+  ElInput, ElSelect, ElOption, ElRadioGroup, ElRadio, ElButton, ElTag,
 } from 'element-plus';
 import useDialog from '@/utils/useDialog';
 
@@ -64,11 +64,34 @@ const config = [
   {
     type: ElButton,
     label: '具体类型',
+    formKey: 'specificType',
     _value: '选择类型',
     _type: 'primary',
     size: 'large',
-    value: false,
+    value: [],
     clickEvent: [useDialog],
+    options: {
+      vIf: [
+        {
+          relationKey: 'specificType',
+          value: (arr: any[]) => arr.length === 0,
+        },
+      ],
+    },
+  },
+  {
+    type: ElTag,
+    label: '具体类型',
+    formKey: 'specificType',
+    value: [],
+    options: {
+      vIf: [
+        {
+          relationKey: 'specificType',
+          value: (arr: any[]) => arr.length > 0,
+        },
+      ],
+    },
   },
 ];
 

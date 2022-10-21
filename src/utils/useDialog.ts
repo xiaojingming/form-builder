@@ -2,7 +2,7 @@ import { h, createApp } from 'vue';
 
 const useDialog = (
   { component, props }: { component: any, props?: any },
-) => new Promise(() => {
+) => new Promise((resolve) => {
   const dom = document.createElement('div');
   dom.setAttribute('id', 'cus-dialog');
   document.body.appendChild(dom);
@@ -33,6 +33,9 @@ const useDialog = (
             if (!v) {
               self.close();
             }
+          },
+          onConfirm(v: any) {
+            resolve(v);
           },
           ...props,
         },

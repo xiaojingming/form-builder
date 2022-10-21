@@ -53,8 +53,13 @@ const props = defineProps<{
   modelValue: boolean;
   router: Router;
 }>();
-// eslint-disable-next-line no-unused-vars
-const emits = defineEmits<{(e: 'update:modelValue', val: boolean): void;}>();
+// eslint-disable-next-line no-spaced-func, func-call-spacing
+const emits = defineEmits<{
+  // eslint-disable-next-line no-unused-vars
+  (e: 'update:modelValue', val: boolean): void;
+  // eslint-disable-next-line no-unused-vars
+  (e: 'confirm', val: any): void;
+}>();
 
 const dialogVisible = computed({
   get: () => props.modelValue,
@@ -71,8 +76,8 @@ const handleCancel = () => {
   dialogVisible.value = false;
 };
 const handleConfirm = () => {
-  // routerInstance.value.push('/form');
-  console.log(form);
+  emits('confirm', form);
+  dialogVisible.value = false;
 };
 
 </script>

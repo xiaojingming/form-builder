@@ -7,6 +7,7 @@ const form = reactive({
   active: '111',
   area: 'area1',
   type: '1',
+  specificType: [],
 });
 const handleClick = () => {
   console.log(form);

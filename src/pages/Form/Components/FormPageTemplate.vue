@@ -15,7 +15,7 @@ export default defineComponent({
       default: () => {},
     },
     modelValue: {
-      type: [String, Boolean],
+      type: [String, Boolean, Array],
     },
     form: {
       type: Object,
@@ -29,6 +29,9 @@ export default defineComponent({
       const currentHasVif = props.config?.options?.vIf;
       if (currentHasVif) {
         for (const { relationKey, value } of currentHasVif) {
+          if (typeof value === 'function') {
+            return value.call(this, props.form[relationKey]);
+          }
           if (props.form[relationKey] !== value) {
             return false;
           }
@@ -38,7 +41,7 @@ export default defineComponent({
     });
     return () => {
       if (!componentShow.value) {
-        emit('update:modelValue', props.config.value);
+        // emit('update:modelValue', props.config.value);
         return;
       }
       return h(ElFormItem, {
@@ -51,15 +54,27 @@ export default defineComponent({
               type: props.config._type,
               size: props.config.size,
               onClick() {
-                emit('update:modelValue', true);
-                props.config.clickEvent.map((event: Function) => event.call(null, {
-                  props: { title: 'hello world!', router },
-                  component: DialogTemplate,
-                }));
+                const types: any[] = [];
+                props.config.clickEvent
+                  .map(async (event: Function) => {
+                    const res = await event.call(null, {
+                      props: { title: 'hello world!', router },
+                      component: DialogTemplate,
+                    });
+                    types.push(res);
+                    emit('update:modelValue', types);
+                    return res;
+                  });
               },
             },
             () => props.config._value,
           );
+        }
+        // 处理ElTag
+        if (props.config.type.name === 'ElTag') {
+          return (props.modelValue as any[]).map((i) => h(props.config.type, null, {
+            default: () => i.name,
+          }));
         }
         return h(props.config.type, {
           modelValue: props.modelValue,
